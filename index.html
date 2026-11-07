@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#1a1a2e">
+  <title>祝你生日快乐</title>
+  <style>
+    :root {
+      --pink: #ff5c8a;
+      --pink-deep: #e94560;
+      --purple: #7b2cbf;
+      --gold: #ffd166;
+      --text: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      overflow-x: hidden;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+        "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(123, 44, 191, 0.45), transparent 35%),
+        radial-gradient(circle at 80% 10%, rgba(233, 69, 96, 0.35), transparent 30%),
+        radial-gradient(circle at 50% 100%, rgba(255, 209, 102, 0.18), transparent 40%),
+        linear-gradient(135deg, #0f0c29 0%, #1a1a2e 45%, #16213e 100%);
+    }
+
+    .stars,
+    .floating-hearts {
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .stars {
+      z-index: 0;
+    }
+
+    .floating-hearts {
+      z-index: 1;
+    }
+
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      border-radius: 50%;
+      background: #ffffff;
+      animation: twinkle linear infinite;
+    }
+
+    @keyframes twinkle {
+      0%,
+      100% {
+        opacity: 0.15;
+        transform: scale(0.8);
+      }
+      50% {
+        opacity: 0.9;
+        transform: scale(1.6);
+      }
+    }
+
+    .floating-heart {
+      position: fixed;
+      bottom: -12vh;
+      color: rgba(255, 92, 138, 0.65);
+      animation: floatUp linear forwards;
+      user-select: none;
+      will-change: transform;
+    }
+
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.8);
+        opacity: 0;
+      }
+      12% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-125vh) rotate(360deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px 18px;
+      padding-top: max(28px, env(safe-area-inset-top));
+      padding-bottom: max(28px, env(safe-area-inset-bottom));
+    }
+
+    .card {
+      width: 100%;
+      max-width: 460px;
+      padding: 36px 24px 30px;
+      text-align: center;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.075);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow:
+        0 24px 70px rgba(0, 0, 0, 0.38),
+        inset 0 1px 0 rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      animation: cardIn 1s ease-out both;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.96);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .heart-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 130px;
+      margin-bottom: 12px;
+    }
+
+    .heart {
+      position: relative;
+      width: 100px;
+      height: 90px;
+      animation: beat 1.2s ease-in-out infinite;
+      filter: drop-shadow(0 0 22px rgba(233, 69, 96, 0.55));
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      width: 52px;
+      height: 80px;
+      border-radius: 52px 52px 0 0;
+      background: linear-gradient(180deg, #ff7aa2 0%, var(--pink-deep) 100%);
+    }
+
+    .heart::before {
+      left: 50px;
+      transform: rotate(-45deg);
+      transform-origin: 0 100%;
+    }
+
+    .heart::after {
+      left: 0;
+      transform: rotate(45deg);
+      transform-origin: 100% 100%;
+    }
+
+    @keyframes beat {
+      0%,
+      100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.12);
+      }
+    }
+
+    .title {
+      margin: 0;
+      font-size: clamp(30px, 8vw, 46px);
+      line-height: 1.2;
+      letter-spacing: 3px;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffffff 0%, #ffd166 45%, #ff8fab 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-shadow: 0 8px 30px rgba(255, 92, 138, 0.2);
+    }
+
+    .subtitle {
+      margin: 10px 0 0;
+      font-size: 13px;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.58);
+    }
+
+    .divider {
+      width: 70px;
+      height: 1px;
+      margin: 24px auto;
+      background: linear-gradient(90deg, transparent, rgba(255, 209, 102, 0.85), transparent);
+    }
+
+    .typewriter {
+      min-height: 96px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      font-size: clamp(16px, 4.4vw, 19px);
+      line-height: 1.85;
+      letter-spacing: 0.8px;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .cursor {
+      display: inline-block;
+      margin-left: 2px;
+      color: var(--gold);
+      animation: blink 0.75s steps(1) infinite;
+    }
+
+    @keyframes blink {
+      0%,
+      49% {
+        opacity: 1;
+      }
+      50%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      outline: 0;
+      cursor: pointer;
+      margin-top: 22px;
+      padding: 13px 28px;
+      border-radius: 999px;
+      color: #2b0714;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      background: linear-gradient(135deg, #ffe29a 0%, #ffd166 45%, #ff9ebb 100%);
+      box-shadow:
+        0 10px 26px rgba(255, 92, 138, 0.32),
+        inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:active {
+      transform: scale(0.96);
+      box-shadow:
+        0 6px 16px rgba(255, 92, 138, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.55);
+    }
+
+    .hint {
+      margin: 24px 0 0;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: rgba(255, 255, 255, 0.48);
+    }
+
+    .small-hearts {
+      margin-top: 14px;
+      font-size: 14px;
+      letter-spacing: 8px;
+      color: rgba(255, 209, 102, 0.8);
+      animation: glow 2.2s ease-in-out infinite;
+    }
+
+    @keyframes glow {
+      0%,
+      100% {
+        opacity: 0.55;
+        transform: scale(0.98);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.04);
+      }
+    }
+
+    @media (max-width: 360px) {
+      .card {
+        padding: 30px 18px 26px;
+        border-radius: 24px;
+      }
+
+      .heart-wrap {
+        height: 112px;
+      }
+
+      .heart {
+        transform: scale(0.88);
+      }
+
+      .typewriter {
+        min-height: 110px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="stars" id="stars" aria-hidden="true"></div>
+  <div class="floating-hearts" id="floatingHearts" aria-hidden="true"></div>
+
+  <main class="container">
+    <section class="card">
+      <div class="heart-wrap">
+        <div class="heart" aria-hidden="true"></div>
+      </div>
+
+      <h1 class="title">祝你生日快乐</h1>
+      <p class="subtitle">Happy Birthday</p>
+
+      <div class="divider"></div>
+
+      <div class="typewriter" aria-live="polite">
+        <span id="typing"></span><span class="cursor">|</span>
+      </div>
+
+      <button class="btn" id="nextBtn" type="button">换一句祝福</button>
+
+      <p class="hint">愿所有美好，都如期而至</p>
+      <div class="small-hearts" aria-hidden="true">♥ ♥ ♥</div>
+    </section>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      const wishes = [
+        "愿你眼里有光，心中有爱，岁岁常欢愉。",
+        "愿新的一岁，平安喜乐，万事胜意。",
+        "愿所有期待都开花，所有努力都有回响。",
+        "愿你被世界温柔以待，也永远有重新出发的勇气。",
+        "愿今天的快乐，只是未来一整年的开始。",
+        "愿你所念皆如愿，所行皆坦途。"
+      ];
+
+      const typingEl = document.getElementById("typing");
+      const nextBtn = document.getElementById("nextBtn");
+
+      let wishIndex = 0;
+      let charIndex = 0;
+      let deleting = false;
+      let timer = null;
+
+      function typeLoop() {
+        const current = wishes[wishIndex];
+
+        if (!deleting) {
+          typingEl.textContent = current.slice(0, charIndex + 1);
+          charIndex += 1;
+
+          if (charIndex === current.length) {
+            deleting = true;
+            timer = window.setTimeout(typeLoop, 1800);
+            return;
+          }
+
+          timer = window.setTimeout(typeLoop, 85);
+        } else {
+          typingEl.textContent = current.slice(0, charIndex - 1);
+          charIndex -= 1;
+
+          if (charIndex === 0) {
+            deleting = false;
+            wishIndex = (wishIndex + 1) % wishes.length;
+            timer = window.setTimeout(typeLoop, 520);
+            return;
+          }
+
+          timer = window.setTimeout(typeLoop, 42);
+        }
+      }
+
+      function startNextWish() {
+        window.clearTimeout(timer);
+        wishIndex = (wishIndex + 1) % wishes.length;
+        charIndex = 0;
+        deleting = false;
+        typingEl.textContent = "";
+        typeLoop();
+      }
+
+      nextBtn.addEventListener("click", startNextWish);
+      typeLoop();
+
+      const starsEl = document.getElementById("stars");
+      const starCount = window.innerWidth < 480 ? 55 : 85;
+
+      for (let i = 0; i < starCount; i += 1) {
+        const star = document.createElement("span");
+        star.className = "star";
+        star.style.left = Math.random() * 100 + "vw";
+        star.style.top = Math.random() * 100 + "vh";
+        star.style.animationDelay = Math.random() * 4 + "s";
+        star.style.animationDuration = 2.5 + Math.random() * 4 + "s";
+        star.style.opacity = String(0.15 + Math.random() * 0.65);
+
+        if (Math.random() > 0.75) {
+          star.style.width = "3px";
+          star.style.height = "3px";
+          star.style.boxShadow = "0 0 8px rgba(255, 255, 255, 0.8)";
+        }
+
+        starsEl.appendChild(star);
+      }
+
+      const heartsEl = document.getElementById("floatingHearts");
+      const heartChars = ["♥", "❤", "♡"];
+
+      function createFloatingHeart() {
+        const heart = document.createElement("span");
+        heart.className = "floating-heart";
+        heart.textContent = heartChars[Math.floor(Math.random() * heartChars.length)];
+        heart.style.left = Math.random() * 100 + "vw";
+        heart.style.fontSize = 12 + Math.random() * 22 + "px";
+        heart.style.animationDuration = 7 + Math.random() * 8 + "s";
+        heart.style.animationDelay = Math.random() * 0.8 + "s";
+        heart.style.opacity = String(0.18 + Math.random() * 0.5);
+
+        heartsEl.appendChild(heart);
+        window.setTimeout(function () {
+          heart.remove();
+        }, 17000);
+      }
+
+      for (let i = 0; i < 8; i += 1) {
+        window.setTimeout(createFloatingHeart, i * 350);
+      }
+
+      window.setInterval(createFloatingHeart, 850);
+    })();
+  </script>
+</body>
+</html>
